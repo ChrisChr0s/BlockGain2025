@@ -1,0 +1,1 @@
+export const API_URL = "https://blockgain2025.onrender.com/api"
