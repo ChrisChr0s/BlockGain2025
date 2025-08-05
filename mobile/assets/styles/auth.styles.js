@@ -13,6 +13,15 @@ export const styles = StyleSheet.create({
     width: 300,
     height: 310,
     resizeMode: "contain",
+     alignItems: "center",
+    justifyContent: "center",
+  },
+    titleMain: {
+    fontSize: 40,
+    fontWeight: "bold",
+    color: COLORS.text,
+    marginVertical: 15,
+    textAlign: "center",
   },
   title: {
     fontSize: 32,

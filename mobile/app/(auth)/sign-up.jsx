@@ -15,6 +15,8 @@ export default function SignUpScreen() {
 
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [pendingVerification, setPendingVerification] = useState(false);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
@@ -26,6 +28,8 @@ export default function SignUpScreen() {
     // Start sign-up process using email and password provided
     try {
       await signUp.create({
+        firstName,
+        lastName,
         emailAddress,
         password,
       });
@@ -39,12 +43,10 @@ export default function SignUpScreen() {
     } catch (err) {
       if (err.errors?.[0]?.code === "form_identifier_exists") {
         setError("That email address is already in use. Please try another.");
-      } 
-      else if (err.errors?.[0]?.code === "form_password_incorrect" || err.errors?.[0]?.code === " Passwords must be 8 characters or more.")
-        {
+      }
+      else if (err.errors?.[0]?.code === "form_password_incorrect" || err.errors?.[0]?.code === " Passwords must be 8 characters or more.") {
         setError("Passwords must be 8 characters or more.");
-      }else
-      {
+      } else {
         setError("An error occurred. Please try again.");
       }
       console.log(err);
@@ -130,6 +132,23 @@ export default function SignUpScreen() {
           </View>
         ) : null}
 
+
+        <TextInput
+          style={[styles.input, error && styles.errorInput]}
+          autoCapitalize="none"
+          value={firstName}
+          placeholder="Enter first name"
+          placeholderTextColor="#9A8478"
+          onChangeText={(firstName) => setFirstName(firstName)}
+        />
+        <TextInput
+          style={[styles.input, error && styles.errorInput]}
+          autoCapitalize="none"
+          value={lastName}
+          placeholder="Enter last name"
+          placeholderTextColor="#9A8478"
+          onChangeText={(lastName) => setLastName(lastName)}
+        />
         <TextInput
           style={[styles.input, error && styles.errorInput]}
           autoCapitalize="none"

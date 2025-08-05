@@ -29,6 +29,12 @@ const CreateScreen = () => {
   const [isExpense, setIsExpense] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
+    const handleAmountChange = (text) => {
+    // Ersetze jedes Komma durch einen Punkt
+    const formattedText = text.replace(',', '.');
+    setAmount(formattedText);
+  };
+
 
   const handleCreate = async ()=>{
 
@@ -137,8 +143,9 @@ const CreateScreen = () => {
             placeholder="0.00"
             placeholderTextColor={COLORS.textLight}
             value={amount}
-            onChangeText={setAmount}
-            keyboardType="numeric"
+             onChangeText={handleAmountChange}
+        // 3. Besseren Tastaturtyp verwenden
+        keyboardType="decimal-pad"
           />
         </View>
        

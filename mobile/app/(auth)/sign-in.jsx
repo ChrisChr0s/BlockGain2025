@@ -14,6 +14,8 @@ export default function Page() {
   const [emailAddress, setEmailAddress] = React.useState('')
  /*  const [userName, setUserName] = React.useState('') */
   const [password, setPassword] = React.useState('')
+  const [firstName, setFirstName] = React.useState('')
+  const [lastName, setLastName] = React.useState('')
   const [error, setError] = React.useState("")
 
   // Handle the submission of the sign-in form
@@ -53,8 +55,11 @@ export default function Page() {
       enableAutomaticScroll={true}
       extraScrollHeight={100}>
       <View style={styles.container}>
+        <Text style={styles.titleMain}>BlockGain</Text>
         <Image source={require("../../assets/images/revenue-i4.png")} style={styles.illustration} />
-        <Text style={styles.title}>Welcome Back</Text>
+        
+
+
         {error ? (
           <View style={styles.errorBox}>
             <Ionicons name="alert-circle" size={20} color={COLORS.expense} />
@@ -73,6 +78,7 @@ export default function Page() {
           placeholderTextColor="#9A8478"
           onChangeText={(userName) => setUserName(userName)}
         /> */}
+       
         <TextInput
           style={[styles.input, error && styles.errorInput]}
           autoCapitalize="none"

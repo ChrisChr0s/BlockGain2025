@@ -1,5 +1,5 @@
 import { View, ActivityIndicator } from "react-native"
-import { styles } from "../assets/styles/auth.styles"
+import { styles } from "../assets/styles/create.styles"
 import { COLORS } from "../constants/colors"
 
 const PageLoader = () => {
