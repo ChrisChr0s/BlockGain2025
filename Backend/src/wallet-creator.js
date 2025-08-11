@@ -1,7 +1,7 @@
 // src/wallet-creator.js
 
 // Importiere 'sql' anstelle von 'pool' aus deiner neuen db.js
-import { sql } from './db.js'; 
+import { sql } from './config/db.js'; 
 import { encrypt } from './encryption.js';
 import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
 
