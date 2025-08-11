@@ -1,35 +1,37 @@
+// src/wallet-creator.js
+
+// Importiere 'sql' anstelle von 'pool' aus deiner neuen db.js
+import { sql } from './db.js'; 
+import { encrypt } from './encryption.js';
 import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
 
-// Diese Funktion wird später deine Logik zum Speichern in der Datenbank enthalten
-// WICHTIG: Du musst eine Logik implementieren, um den privateKey zu verschlüsseln!
-const saveWalletToDatabase = async (clerkUserId, publicAddress, privateKey, encryptedPrivateKey) => {
-  // Dies ist nur ein Beispiel-Log. Ersetze es durch deine Datenbank-Logik.
-  console.log(`Speichere Wallet für Benutzer ${clerkUserId}`);
-  console.log(`Öffentliche Adresse: ${publicAddress}`);
-    console.log(`Private Key: ${privateKey}`);
-
-    console.log(`Verschlüsselter Private Key: ${encryptedPrivateKey}`);
-  // In einer echten Anwendung würdest du hier z.B. einen SQL-Befehl ausführen:
-  // await database.query('INSERT INTO wallets ...');
+// Die angepasste Funktion zum Speichern
+const saveWalletToDatabase = async (clerkUserId, publicAddress, encryptedPrivateKey) => {
+  try {
+    // So schreibst du Queries mit dem Neon-Treiber.
+    // Es ist sicherer, da es SQL-Injection automatisch verhindert.
+    await sql`
+      INSERT INTO user_wallets (clerk_user_id, sui_public_address, encrypted_private_key)
+      VALUES (${clerkUserId}, ${publicAddress}, ${encryptedPrivateKey})
+      ON CONFLICT (clerk_user_id) DO NOTHING;
+    `;
+    console.log(`Wallet für Benutzer ${clerkUserId} erfolgreich in der DB gespeichert.`);
+  } catch (error) {
+    console.error("Fehler beim Speichern des Wallets in der DB:", error);
+    throw error;
+  }
 };
 
-// Dies ist die Hauptfunktion, die von server.js aufgerufen wird
+// Der Rest deiner createWalletForUser Funktion bleibt gleich...
 export const createWalletForUser = async (clerkUserId) => {
-  // 1. Ein neues Schlüsselpaar (Public + Private Key) erstellen
-  const keypair = new Ed25519Keypair();
+    const keypair = new Ed25519Keypair();
+    const publicAddress = keypair.getPublicKey().toSuiAddress();
+    const privateKey = keypair.getSecretKey();
 
-  // 2. Die öffentliche Sui-Adresse extrahieren
-  const publicAddress = keypair.getPublicKey().toSuiAddress();
+    //const encryptedPrivateKey = `encrypted_${privateKey}`; // ERSETZE DAS!
+     const encryptedPrivateKey = encrypt(privateKey);
 
-  // 3. Den Private Key extrahieren
-  const privateKey = keypair.getSecretKey();
+    await saveWalletToDatabase(clerkUserId, publicAddress, encryptedPrivateKey);
 
-  // 4. WICHTIG: Den Private Key vor dem Speichern VERSCHLÜSSELN!
-  // Dies ist nur ein Platzhalter. Hier muss echte Verschlüsselung stattfinden.
-  const encryptedPrivateKey = `encrypted_${privateKey}`; // ERSETZE DAS!
-
-  // 5. Die Wallet-Daten in der Datenbank speichern
-  await saveWalletToDatabase(clerkUserId, publicAddress, encryptedPrivateKey);
-
-  console.log("Wallet-Erstellungsprozess für " + clerkUserId + " abgeschlossen.");
+    console.log("Wallet-Erstellungsprozess für " + clerkUserId + " abgeschlossen.");
 };
