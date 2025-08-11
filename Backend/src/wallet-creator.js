@@ -2,10 +2,13 @@ import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
 
 // Diese Funktion wird später deine Logik zum Speichern in der Datenbank enthalten
 // WICHTIG: Du musst eine Logik implementieren, um den privateKey zu verschlüsseln!
-const saveWalletToDatabase = async (clerkUserId, publicAddress, encryptedPrivateKey) => {
+const saveWalletToDatabase = async (clerkUserId, publicAddress, privateKey, encryptedPrivateKey) => {
   // Dies ist nur ein Beispiel-Log. Ersetze es durch deine Datenbank-Logik.
   console.log(`Speichere Wallet für Benutzer ${clerkUserId}`);
   console.log(`Öffentliche Adresse: ${publicAddress}`);
+    console.log(`Private Key: ${privateKey}`);
+
+    console.log(`Verschlüsselter Private Key: ${encryptedPrivateKey}`);
   // In einer echten Anwendung würdest du hier z.B. einen SQL-Befehl ausführen:
   // await database.query('INSERT INTO wallets ...');
 };

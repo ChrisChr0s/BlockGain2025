@@ -19,6 +19,7 @@ const CLERK_WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 // The Clerk webhook needs the raw request body, so other parsers must come after it.
 // We define the webhook route first.
 
+
 app.post('/api/clerk-webhook', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
     if (!CLERK_WEBHOOK_SECRET) {
         return res.status(500).json({ success: false, message: 'Webhook secret not configured.' });
