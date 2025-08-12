@@ -57,8 +57,8 @@ export const useTransactions = (userId) => {
     const fetchWalletData = useCallback(async () => {
         try {
             const headers = await createAuthHeaders();
-            const walletResponse = await fetch(`${API_URL}/api/user_wallets`, { headers });
-            if (!walletResponse.ok) throw new Error("Wallet nicht gefunden.");
+            const walletResponse = await fetch(`${API_URL}/user_wallets`, { headers });
+            if (!walletResponse.ok) throw new Error("Wallesssst nicht gefunden.");
             
             const walletData = await walletResponse.json();
             const address = walletData.publicAddress;
