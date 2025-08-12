@@ -24,6 +24,7 @@ const saveWalletToDatabase = async (clerkUserId, publicAddress, encryptedPrivate
 
 // Der Rest deiner createWalletForUser Funktion bleibt gleich...
 export const createWalletForUser = async (clerkUserId) => {
+  console.log("PrivateKey",privateKey)
     const keypair = new Ed25519Keypair();
     const publicAddress = keypair.getPublicKey().toSuiAddress();
     const privateKey = keypair.getSecretKey();

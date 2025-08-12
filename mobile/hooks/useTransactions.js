@@ -1,10 +1,10 @@
 import { useCallback, useState, useEffect } from "react";
 import { Alert } from "react-native";
 import { API_URL } from "../constants/api";
-import { useAuth } from "@clerk/clerk-expo"; // Importieren für die Authentifizierung
+
 import { SuiClient, getFullnodeUrl } from '@mysten/sui.js/client'; // Importieren für den Kontostand
 
-export const useTransactions = (userId) => {
+export const useTransactions = (userid) => {
     // === Bestehende States von dir ===
     const [transactions, setTransactions] = useState([]);
     const [summary, setSummary] = useState({
@@ -19,69 +19,67 @@ export const useTransactions = (userId) => {
     const [balance, setBalance] = useState(null);
 
     // === Authentifizierung von Clerk ===
-    const { getToken } = useAuth();
+
 
     // Hilfsfunktion zum Erstellen der Authentifizierungs-Header
-    const createAuthHeaders = async () => {
-        const token = await getToken();
-        return {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-        };
-    };
+
 
     // Deine bestehende Logik, jetzt mit Authentifizierung
     const fetchTransactions = useCallback(async () => {
         try {
-            const headers = await createAuthHeaders();
-            const response = await fetch(`${API_URL}/transactions/${userId}`, { headers });
+
+            const response = await fetch(`${API_URL}/transactions/${userid}`);
             const data = await response.json();
             setTransactions(data);
         } catch (error) {
             console.log("Fehler beim Abrufen der Transaktionen:", error);
         }
-    }, [userId, getToken]);
+    }, [userid]);
 
     const fetchSummary = useCallback(async () => {
         try {
-            const headers = await createAuthHeaders();
-            const response = await fetch(`${API_URL}/transactions/summary/${userId}`, { headers });
+
+            const response = await fetch(`${API_URL}/transactions/summary/${userid}`);
             const data = await response.json();
             setSummary(data);
         } catch (error) {
             console.log("Fehler beim Abrufen der Zusammenfassung:", error);
         }
-    }, [userId, getToken]);
-    
+    }, [userid]);
+
     // === Neue Logik zum Abrufen des Wallets & Kontostands ===
     const fetchWalletData = useCallback(async () => {
         try {
-            const headers = await createAuthHeaders();
-            const walletResponse = await fetch(`${API_URL}/user_wallets`, { headers });
-            if (!walletResponse.ok) throw new Error("Wallesssst nicht gefunden.");
-            
-            const walletData = await walletResponse.json();
-            const address = walletData.publicAddress;
-            setWalletAddress(address);
 
-            // Kontostand direkt danach abrufen
-            const client = new SuiClient({ url: getFullnodeUrl('testnet') });
-            const balanceResponse = await client.getBalance({ owner: address });
-            const suiBalance = parseInt(balanceResponse.totalBalance) / 1_000_000_000;
-            setBalance(suiBalance.toFixed(4));
-        } catch (error) {
-            console.log("Fehler beim Abrufen der Wallet-Daten:", error);
-        }
-    }, [userId, getToken]);
+            console.log(`${API_URL}/user_wallets/${userid}`);
+
+            const response = await fetch(`${API_URL}/user_wallets/${userid}`);
+            if (!response.ok) {
+                const text = await response.text();
+                throw new Error(`HTTP ${response.status}: ${text}`);}
+
+                const walletData = await response.json();
+                const address = walletData.publicAddress;
+                setWalletAddress(address);
+
+                // Kontostand direkt danach abrufen
+                const client = new SuiClient({ url: getFullnodeUrl('testnet') });
+                const balanceResponse = await client.getBalance({ owner: address });
+                const suiBalance = parseInt(balanceResponse.totalBalance) / 1_000_000_000;
+                setBalance(suiBalance.toFixed(4));
+            } catch (error) {
+                console.log("Fehler beim Abrufen der Wallet-Daten:", error);
+            }
+        }, [userid]);
 
     // Deine loadData-Funktion, jetzt erweitert um fetchWalletData
     const loadData = useCallback(async () => {
-        if (!userId) return;
+        if (!userid) return;
         setIsLoading(true);
         try {
             // Führt alle Abfragen gleichzeitig aus für maximale Effizienz
             await Promise.all([
-                fetchTransactions(), 
+                fetchTransactions(),
                 fetchSummary(),
                 fetchWalletData()
             ]);
@@ -90,8 +88,8 @@ export const useTransactions = (userId) => {
         } finally {
             setIsLoading(false);
         }
-    }, [fetchTransactions, fetchSummary, fetchWalletData, userId]);
-    
+    }, [fetchTransactions, fetchSummary, fetchWalletData, userid]);
+
     // Initiales Laden der Daten
     useEffect(() => {
         loadData();
@@ -101,10 +99,10 @@ export const useTransactions = (userId) => {
     // Deine deleteTransaction-Funktion, jetzt mit Authentifizierung
     const deleteTransaction = async (id) => {
         try {
-            const headers = await createAuthHeaders();
+
             const response = await fetch(`${API_URL}/transactions/${id}`, {
                 method: "DELETE",
-                headers,
+
             });
             if (!response.ok) throw new Error("Löschen der Transaktion fehlgeschlagen");
             loadData(); // Lädt alle Daten neu, um die UI zu aktualisieren
@@ -116,13 +114,13 @@ export const useTransactions = (userId) => {
     };
 
     // Gib alle Werte zurück, die deine UI benötigt
-    return { 
-        transactions, 
-        summary, 
-        isLoading, 
-        loadData, 
-        deleteTransaction, 
-        walletAddress, 
-        balance 
+    return {
+        transactions,
+        summary,
+        isLoading,
+        loadData,
+        deleteTransaction,
+        walletAddress,
+        balance
     };
 };

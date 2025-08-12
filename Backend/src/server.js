@@ -65,7 +65,9 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/transactions", transactionsRoute);
-app.use("/api", userRoutes); 
+app.use("/api/user_wallets", userRoutes); 
+app.listen(5001, () => console.log("Server running"));
+
 
 
 // --- Start Server ---
