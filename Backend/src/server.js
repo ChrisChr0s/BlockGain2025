@@ -7,7 +7,8 @@ import RateLimite from "./middleware/rateLimiter.js";
 import transactionsRoute from "./routes/transactionsRoute.js";
 import { initDB } from "./config/db.js";
 import job from "./config/cron.js";
-import { createWalletForUser } from './wallet-creator.js'; // Ensure this path is correct
+import { createWalletForUser } from './wallet-creator.js'; 
+import userRoutes from './routes/userRoutes.js'; 
 
 dotenv.config();
 
@@ -64,6 +65,7 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/transactions", transactionsRoute);
+app.use("/api", userRoutes); 
 
 
 // --- Start Server ---

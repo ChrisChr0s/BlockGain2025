@@ -16,7 +16,7 @@ export default function Page() {
   const router = useRouter()
   const [refreshing,setRefreshing ] = useState(false)
 
-  const { transactions, summary, isLoading, deleteTransaction, loadData } = useTransactions(user.id)
+  const { transactions, summary, isLoading, deleteTransaction, loadData, walletAddress,  balance  } = useTransactions(user.id)
 
   const onRefresh = async ()=> {
     setRefreshing(true)
@@ -68,7 +68,13 @@ export default function Page() {
           </View>
         </View>
         <BalanceCard summary={summary}></BalanceCard>
-
+          <View style={styles.container}>
+            <Text style={styles.headerTitle}>Deine Wallet</Text>
+            <Text style={styles.headerTitle}>Adresse:</Text>
+            <Text style={styles.headerTitle} selectable>{walletAddress}</Text>
+            <Text style={styles.headerTitle}>Kontostand:</Text>
+            <Text style={styles.headerTitle}>{balance} SUI</Text>
+        </View>
         <View style={styles.transactionsHeaderContainer}>
         <Text style={styles.sectionTitle}>Recent Transactions</Text>
         </View>
