@@ -68,15 +68,16 @@ export default function Page() {
           </View>
         </View>
         <BalanceCard summary={summary}></BalanceCard>
-          <View style={styles.container}>
+       
+        <View style={styles.transactionsHeaderContainer}>
+        <Text style={styles.sectionTitle}>Recent Transactions</Text>
+        </View>
+       <View>
             <Text style={styles.headerTitle}>Deine Wallet</Text>
             <Text style={styles.headerTitle}>Adresse:</Text>
             <Text style={styles.headerTitle} selectable>{walletAddress}</Text>
             <Text style={styles.headerTitle}>Kontostand:</Text>
-            <Text style={styles.headerTitle}>{balance} SUI</Text>
-        </View>
-        <View style={styles.transactionsHeaderContainer}>
-        <Text style={styles.sectionTitle}>Recent Transactions</Text>
+            <Text style={styles.balanceText}>{balance} SUI</Text>
         </View>
       </View>
 
