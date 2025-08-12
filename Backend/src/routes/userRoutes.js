@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Diese Route ist jetzt geschützt. Clerks Middleware wird zuerst ausgeführt.
 // Wenn der Benutzer nicht authentifiziert ist, wird automatisch ein 401-Fehler gesendet.
-router.get('/me/wallet', ClerkExpressRequireAuth(), async (req, res) => {
+router.get('/user_wallets', ClerkExpressRequireAuth(), async (req, res) => {
     try {
         // Durch die Middleware haben wir jetzt Zugriff auf 'req.auth'.
         const clerkUserId = req.auth.userId;
