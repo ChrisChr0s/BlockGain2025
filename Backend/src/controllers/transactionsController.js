@@ -15,21 +15,7 @@ export async function getTransactionsByUserId(req,res){
             res.status(500).json({ message: "Internal Server error" })
         }
     }
-    export async function getPublicAdress(req,res){
-    
-        try {
-            const { userId } = req.params;
-            console.log(userId);
-            const transactions = await sql`
-            SELECT sui_public_address FROM user_wallets WHERE clerk_user_id = ${userId} 
-            `
-    
-            res.status(200).json(transactions);
-        } catch (error) {
-            console.log("Error getting the transaction", error)
-            res.status(500).json({ message: "Internal Server error" })
-        }
-    }
+  
 
 export async function createTransaction (req, res) {
     //title,amout,category,User_id
