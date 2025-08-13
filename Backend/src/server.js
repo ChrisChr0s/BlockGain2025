@@ -63,10 +63,10 @@ app.use(express.json()); // This is a built-in version of bodyParser for JSON
 app.get("/api/health", (req, res) => {
     res.status(200).json({ status: "ok" });
 });
-
-app.use("/api/transactions", transactionsRoute);
 app.use("/api/user_wallets", userRoutes); 
-app.listen(5001, () => console.log("Server running"));
+app.use("/api/transactions", transactionsRoute);
+
+
 
 
 
