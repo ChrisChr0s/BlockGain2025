@@ -4,7 +4,7 @@
 import { decrypt } from './encryption.js';
 
 // FÜGE HIER DEN KEY EIN, den du aus deinem Log kopiert hast
-const encryptedKeyFromDB = "eaf30df6321643ad667d13839eb82b2a55349cac1bf3556ba5a2c67730d892f1ef6aab810f02196609204aa463b66a3552c83c436450f84a6d0349499468a0ef93a59e3a9844:94f30c6394faa407209cb6d7a7607ed6";
+const encryptedKeyFromDB = "eaf30df6321643ad667d13839ebe29374e3bd7a74ff21660a0bfc46979db93eeab6cb98b520d11615d2b47b76ce9303506cf781b2152ad48750a581ed567f1f2c0b7c17c9840:31bbfb2c4860dab5d754eb22a75a5347";
 
 console.log("Teste die Entschlüsselung...");
 console.log("Verschlüsselter Key:", encryptedKeyFromDB);
@@ -18,6 +18,7 @@ console.log("Entschlüsselter Private Key:", decryptedKey);
 // Überprüfe, ob das Ergebnis wie ein echter Sui-Key aussieht
 if (decryptedKey && decryptedKey.startsWith('suiprivkey1')) {
   console.log("✅ Test erfolgreich! Der Key sieht valide aus.");
+  console.log("Privater Schlüssel:", decryptedKey);
 } else {
   console.error("❌ Test fehlgeschlagen oder der Key ist null.");
 }
